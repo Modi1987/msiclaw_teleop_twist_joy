@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    device_name: "Xbox360 Controller for Windows Mouse"
+    deadzone: 0.05
+    autorepeat_rate: 20.0
+    max_axis_value: 7.0
+  
