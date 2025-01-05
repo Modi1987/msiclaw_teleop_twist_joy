@@ -100,8 +100,8 @@ class JoystickPublisher(Node):
 
             if interval > timeout_threshold:
                 self.assign_joy_values(self.ZERO_AXES_VALUES, self.ZERO_BUTTONS_VALUES)
-            # publish the message
-            self.publisher_.publish(self.joy_msg)
+        # publish the message
+        self.publisher_.publish(self.joy_msg)
 
     def declare_the_parameters(self):
         self.declare_parameters(
