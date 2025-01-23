@@ -4,21 +4,12 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Joy
-from evdev import InputDevice, ecodes, list_devices
+from evdev import InputDevice, ecodes
 from rclpy.logging import get_logger
 import copy
+from .utils import find_device_path
 
 NODE_NAME = 'msiclaw_joystick_publisher'
-
-def find_device_path(logger, target_name):
-    devices = [InputDevice(path) for path in list_devices()]
-    logger.info("Searching devices")
-    for device in devices:
-        if target_name in device.name:
-            info_message = f"found the joystick device with target_name: \'{target_name}\'"
-            logger.info(info_message)
-            return device.path
-    return None
 
 class JoystickPublisher(Node):
     def __init__(self, target_device_name = "Xbox360 Controller for Windows Mouse"):

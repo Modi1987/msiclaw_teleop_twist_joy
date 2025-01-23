@@ -24,6 +24,7 @@ setup(
     entry_points={
         'console_scripts': [
             'msiclaw_joy = msiclaw_teleop_twist_joy.msiclaw_joy:main',
+            'msiclaw_joy_teleop_manager = msiclaw_teleop_twist_joy.msiclaw_joy_teleop_manager:main'
         ],
     },
 )
