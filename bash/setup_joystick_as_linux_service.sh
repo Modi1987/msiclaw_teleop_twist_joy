@@ -3,20 +3,20 @@
 SERVICE_FILE="msiclaw_teleop_manager.service"
 SYSTEMD_PATH="/etc/systemd/system"
 
-ROS2_DOMAIN_ID=""
+ROS_DOMAIN_ID=""
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --ROS2_DOMAIN_ID) ROS2_DOMAIN_ID="$2"; shift ;;
+        --ROS_DOMAIN_ID) ROS_DOMAIN_ID="$2"; shift ;;
         *) echo "Unknown parameter: $1"; exit 1 ;;
     esac
     shift
 done
 
 # Check if required arguments are provided
-if [[ -z "$ROS2_DOMAIN_ID" ]]; then
-    echo "Usage: $0 --ROS2_DOMAIN_ID <ROS_DOMAIN_ID>"
+if [[ -z "$ROS_DOMAIN_ID" ]]; then
+    echo "Usage: $0 --ROS_DOMAIN_ID <ROS_DOMAIN_ID>"
     exit 1
 fi
 
@@ -31,7 +31,7 @@ echo "Installing teleop_twist_joy for ROS2 distro: ${ROS_DISTRO}..."
 sudo apt-get install -y ros-${ROS_DISTRO}-teleop-twist-joy
 
 # Set up the msiclaw_teleop_twist_joy as a service
-echo "Specified ROS2_DOMAIN_ID: ${ROS2_DOMAIN_ID}"
+echo "Specified ROS_DOMAIN_ID: ${ROS_DOMAIN_ID}"
 
 # Function to find the workspace directory dynamically
 find_workspace_dir() {
@@ -65,7 +65,7 @@ Description=MsiClaw Joystick Teleop Manager ROS2 Node
 After=network.target
 
 [Service]
-ExecStart=/bin/bash -c "source $HOME/.bashrc && source ${WORKSPACE_SOURCE_DIR}/install/setup.bash && export ROS2_DOMAIN_ID=${ROS2_DOMAIN_ID} && ros2 launch msiclaw_teleop_twist_joy msiclaw_joy_teleop_manager.launch.py"
+ExecStart=/bin/bash -c "source $HOME/.bashrc && source /opt/ros/${ROS_DISTRO}/setup.bash && source ${WORKSPACE_SOURCE_DIR}/install/setup.bash && export ROS_DOMAIN_ID=${ROS_DOMAIN_ID} && ros2 launch msiclaw_teleop_twist_joy msiclaw_joy_teleop_manager.launch.py"
 WorkingDirectory=${WORKSPACE_SOURCE_DIR}
 Restart=always
 User=$USER
