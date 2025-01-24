@@ -20,28 +20,40 @@ if [[ -z "$ROS2_DOMAIN_ID" ]]; then
     exit 1
 fi
 
+# Check if ROS_DISTRO is set
 if [[ -z "$ROS_DISTRO" ]]; then
     echo "Error: ROS_DISTRO is not set. Please source your ROS 2 environment (e.g., source /opt/ros/foxy/setup.bash)."
     exit 1
 fi
 
-# install teleop_twist_joy
-echo "ROS2 distro is: " ${ROS_DISTRO}
-sudo apt-get install ros-${ROS_DISTRO}-teleop-twist-joy
+# Install teleop_twist_joy
+echo "Installing teleop_twist_joy for ROS2 distro: ${ROS_DISTRO}..."
+sudo apt-get install -y ros-${ROS_DISTRO}-teleop-twist-joy
 
-# setup the msiclaw_teleop_twist_joy as a service
-echo "specfied ROS2_DOMAIN_ID: " ${ROS2_DOMAIN_ID}
+# Set up the msiclaw_teleop_twist_joy as a service
+echo "Specified ROS2_DOMAIN_ID: ${ROS2_DOMAIN_ID}"
 
-# start building
-echo "Buidling the package msiclaw_teleop_twist_joy"
+# Function to find the workspace directory dynamically
+find_workspace_dir() {
+    local dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # Start from the script's directory
+    while [[ "$dir" != "/" ]]; do
+        if [[ -d "$dir/src" ]]; then
+            echo "$dir"  # Found the workspace directory
+            return 0
+        fi
+        dir="$(dirname "$dir")"  # Move up one directory
+    done
+    echo "Error: Could not find workspace directory containing a 'src' folder!" >&2
+    exit 1
+}
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORKSPACE_SOURCE_DIR="$(dirname "$(dirname "$(dirname "$(dirname "$SCRIPT_DIR")")")")"
-echo "current workspace is: ${WORKSPACE_SOURCE_DIR}"
+# Call the function and assign the result to WORKSPACE_SOURCE_DIR
+WORKSPACE_SOURCE_DIR=$(find_workspace_dir)
+echo "Detected workspace directory: ${WORKSPACE_SOURCE_DIR}"
 
-if [ -f  $SYSTEMD_PATH/$SERVICE_FILE ]; then
-    echo "Service file $SYSTEMD_PATH/$SERVICE_FILE already exists, will be removed and reinstalled!"
-    sudo bash -c "rm -f $SYSTEMD_PATH/$SERVICE_FILE"
+if [ -f "$SYSTEMD_PATH/$SERVICE_FILE" ]; then
+    echo "Service file $SYSTEMD_PATH/$SERVICE_FILE already exists. It will be removed and reinstalled!"
+    sudo rm -f "$SYSTEMD_PATH/$SERVICE_FILE"
 fi
 
 echo "Creating the systemd service file for joystick_teleop_manager..."
@@ -53,9 +65,9 @@ Description=MsiClaw Joystick Teleop Manager ROS2 Node
 After=network.target
 
 [Service]
-ExecStart=/bin/bash -c "source /home/${USER}/.bashrc && source ${WORKSPACE_SOURCE_DIR}/install/setup.bash && export ROS2_DOMAIN_ID=${ROS2_DOMAIN_ID} && ros2 launch msiclaw_teleop_twist_joy msiclaw_joy_teleop_manager.launch.py"
+ExecStart=/bin/bash -c "source $HOME/.bashrc && source ${WORKSPACE_SOURCE_DIR}/install/setup.bash && export ROS2_DOMAIN_ID=${ROS2_DOMAIN_ID} && ros2 launch msiclaw_teleop_twist_joy msiclaw_joy_teleop_manager.launch.py"
 WorkingDirectory=${WORKSPACE_SOURCE_DIR}
-Restart=on-failure
+Restart=always
 User=$USER
 Group=$USER
 
@@ -73,4 +85,12 @@ sudo systemctl daemon-reload
 echo "Enabling ${SERVICE_FILE} service..."
 sudo systemctl enable ${SERVICE_FILE}
 
-echo "Setup complete. You can now start the service using: sudo systemctl start ${SERVICE_FILE}"
+# Start the service
+echo "Starting ${SERVICE_FILE} service..."
+sudo systemctl start ${SERVICE_FILE}
+
+# Check service status
+echo "Checking ${SERVICE_FILE} status..."
+sudo systemctl status ${SERVICE_FILE}
+
+echo "Setup complete. The service is now running!"
