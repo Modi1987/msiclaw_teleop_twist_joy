@@ -24,14 +24,14 @@ def generate_launch_description():
         ],
         remappings=[
             ('/cmd_vel', 'input/cmd_vel_teleop_msiclaw_joy'),
-            ('joy', 'msiclaw_joy')
+            ('joy', 'handheld_joy')
         ],
     )
 
     msi_joy_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("msiclaw_teleop_twist_joy"),
+                get_package_share_directory("handheld_teleop_twist_joy"),
                 "launch/joy.launch.py",
             )
         )
