@@ -8,6 +8,9 @@ def generate_launch_description():
         package='msiclaw_teleop_twist_joy',
         executable='msiclaw_joy_teleop_manager',
         output='screen',
+        remappings=[
+            ('msiclaw_joy', 'handheld_joy') # consume
+        ],
     )
     ld = LaunchDescription()
     ld.add_action(msiclaw_joy_teleop_manager_node)
