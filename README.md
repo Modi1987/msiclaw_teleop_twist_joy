@@ -32,5 +32,7 @@ ros2 launch msiclaw_teleop_twist_joy joy.launch.py
 Then echo the following
 
 ```
-ros2 topic echo /msiclaw_joy
+ros2 topic echo /handheld_joy
+
+ros2 topic echo /input/cmd_vel_teleop_handheld_joy
 ```
