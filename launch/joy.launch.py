@@ -15,7 +15,7 @@ def generate_launch_description():
         output='screen',
         parameters=[config_file],
         remappings=[
-            ('msiclaw_joy', 'handheld_joy') # publish
+            ('msiclaw_joy', 'handheld_joy') # published by the node
         ],
     )
     ld = LaunchDescription()

@@ -9,7 +9,7 @@ def generate_launch_description():
         executable='msiclaw_joy_teleop_manager',
         output='screen',
         remappings=[
-            ('msiclaw_joy', 'handheld_joy') # consume
+            ('msiclaw_joy', 'handheld_joy') # consumed by the node
         ],
     )
     ld = LaunchDescription()

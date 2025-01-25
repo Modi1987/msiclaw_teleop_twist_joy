@@ -23,15 +23,15 @@ def generate_launch_description():
             {'publish_stamped_twist': False}
         ],
         remappings=[
-            ('/cmd_vel', 'mmd_vel_mux_input/cmd_vel_teleop_handheld_joy'), # publish
-            ('msiclaw_joy', 'handheld_joy') # consume
+            ('/cmd_vel', 'cmd_vel_mux_input/cmd_vel_teleop_handheld_joy'), # published by the node
+            ('joy', 'handheld_joy') # consumed by the node
         ],
     )
 
     msi_joy_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("handheld_teleop_twist_joy"),
+                get_package_share_directory("msiclaw_teleop_twist_joy"),
                 "launch/joy.launch.py",
             )
         )
