@@ -29,6 +29,7 @@ fi
 # installing evdev
 sudo apt-get install python-dev python-pip gcc
 sudo apt-get install linux-headers-$(uname -r)
+sudo pip install evdev
 
 # Install teleop_twist_joy
 echo "Installing teleop_twist_joy for ROS2 distro: ${ROS_DISTRO}..."
