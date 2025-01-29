@@ -27,9 +27,10 @@ if [[ -z "$ROS_DISTRO" ]]; then
 fi
 
 # installing evdev
-sudo apt-get install python-dev python-pip gcc
-sudo apt-get install linux-headers-$(uname -r)
-sudo pip install evdev
+sudo apt install python3-evdev
+
+# fix issue user is not in input
+sudo usermod -aG input $USER
 
 # Install teleop_twist_joy
 echo "Installing teleop_twist_joy for ROS2 distro: ${ROS_DISTRO}..."
