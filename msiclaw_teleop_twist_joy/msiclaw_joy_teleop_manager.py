@@ -26,7 +26,7 @@ class JoystickTeleopManager(Node):
         )
 
         self._message_time = None
-        self._timer = self.create_timer(0.01, self.timer_callback)
+        self._timer = self.create_timer(2, self.timer_callback)
 
     def declare_the_parameters(self):
         self.declare_parameters(
