@@ -26,6 +26,10 @@ if [[ -z "$ROS_DISTRO" ]]; then
     exit 1
 fi
 
+# installing evdev
+sudo apt-get install python-dev python-pip gcc
+sudo apt-get install linux-headers-$(uname -r)
+
 # Install teleop_twist_joy
 echo "Installing teleop_twist_joy for ROS2 distro: ${ROS_DISTRO}..."
 sudo apt-get install -y ros-${ROS_DISTRO}-teleop-twist-joy
