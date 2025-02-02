@@ -13,7 +13,10 @@ def generate_launch_description():
         package='msiclaw_teleop_twist_joy',
         executable='msiclaw_joy',
         output='screen',
-        parameters=[config_file]
+        parameters=[config_file],
+        remappings=[
+            ('msiclaw_joy', 'handheld_joy') # published by the node
+        ],
     )
     ld = LaunchDescription()
     ld.add_action(msiclaw_joy_node)

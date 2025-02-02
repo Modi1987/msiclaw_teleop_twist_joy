@@ -23,8 +23,8 @@ def generate_launch_description():
             {'publish_stamped_twist': False}
         ],
         remappings=[
-            ('/cmd_vel', 'input/cmd_vel_teleop_msiclaw_joy'),
-            ('joy', 'msiclaw_joy')
+            ('/cmd_vel', 'cmd_vel_mux_input/cmd_vel_teleop_handheld_joy'), # published by the node
+            ('joy', 'handheld_joy') # consumed by the node
         ],
     )
 
