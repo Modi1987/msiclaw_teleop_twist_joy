@@ -1,3 +1,4 @@
+# NOTE: I WAS ONLY ABLE TO GET THE LEFT JOYSTIC TO WORK
 
 # msiclaw_teleop_twist_joy
 
